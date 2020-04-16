@@ -1,0 +1,23 @@
+name:                semigroups
+version:             0.1.0.0
+#synopsis:
+#description:
+homepage:            https://github.com/morteako/semigroups#readme
+license:             BSD3
+author:              Morten Kolstad
+maintainer:          example@example.com
+copyright:           2020 Morten Kolstad
+category:            Web
+extra-source-files:
+- README.md
+
+dependencies:
+  - base >= 4.7 && < 5
+  - mod
+  - bimap
+
+
+executables:
+  semigroups:
+    source-dirs:      src
+    main:             Main.hs
