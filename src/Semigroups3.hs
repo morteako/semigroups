@@ -22,7 +22,8 @@ type C3 = Sum (Mod 3)
 
 type S3 = Null (Null' ()) O2
 
-type S4 = Maybe CH2
+-- type S4 = Maybe CH2 --All
+type S4 = Zero Xor --All
 
 type S5 = Maybe C2
 
@@ -43,7 +44,8 @@ type S9 = Zero O2
 type S10 = Maybe O2
 
 --check mapping
-type S11 = Null All (First Bool)
+-- type S11 = Null All (First Bool)
+type S11 = Zero (Null () ())
 
 type S12 = Maybe O2
 

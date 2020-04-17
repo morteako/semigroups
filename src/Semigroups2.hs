@@ -8,7 +8,9 @@ import           Null
 import           Xor
 
 
-type O2 = Null () ()
+type O2 = Null' ()
+-- type O2 = Proxy
+
 
 
 type LeftZero2 = First Bool

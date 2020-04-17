@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1a5c56f4f2c29a5171464f58722802bc172fe84bdc2bd3b5fca6a34dc87e33a1
+-- hash: 51ef41cdd05d7a61c8c5184118ec77d2d159040dd18549d3230909cfdab4509a
 
 name:           semigroups
 version:        0.1.0.0
@@ -26,6 +26,7 @@ executable semigroups
       Null
       Semigroups2
       Semigroups3
+      Sorted
       Xor
       Zero
       Paths_semigroups

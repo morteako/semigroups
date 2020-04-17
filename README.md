@@ -1,14 +1,18 @@
 # semigroups
 
-## Oppgaver
+## TODO / "Open questions"
 
 - Xor 
   - finne en innebygget versjon (som ikke er Sum (Mod 2)), pga feil kardinalitet
-- Fjerne så mange Null man kan
-  - Finne innebygget Null'
 
-- Semigroups with three elements
-- Finne nr 14
-- Finne nr 2
+
+### Possible to improve
+  - Remove as many uses of Null as possible 
+  - 
+
+### Missing
+  - [Semigroups with three elements](https://en.wikipedia.org/wiki/Semigroup_with_three_elements)
+    - Nr 2
+    - Nr 14
 
 

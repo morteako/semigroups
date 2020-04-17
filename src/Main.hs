@@ -14,10 +14,11 @@ check xs = do
 
 main :: IO ()
 main = do
-  putStrLn "hello world"
   -- mapM_ print $ check [Null :: Null () (), NotNull ()]
   -- mapM_ print $ check3 toTest fromTest
   -- mapM_ print $ check [Nothing, Just (First False), Just (First True)]
 
-  mapM_ (print . fmap getMax) $ check $ fmap Max
-                                             [Nothing, Just False, Just True]
+  -- mapM_ (print . fmap getMax) $ check $ fmap Max
+  --                                            [Nothing, Just False, Just True]
+
+  test
