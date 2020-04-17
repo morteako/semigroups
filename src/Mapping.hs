@@ -185,7 +185,7 @@ instance Mapping S13 XYZ where
     Max (Just True)  <-> Z
   |]
 
-  res = undefined
+  res = [[X, Y, Z], [Y, Y, Z], [Z, Z, Z]]
 
 instance Mapping S8 XYZ where
   mapping = [biCase|
@@ -195,6 +195,26 @@ instance Mapping S8 XYZ where
   |]
 
   res = [[Z, Z, Z], [Z, Y, Z], [Z, Z, Z]]
+
+
+instance Mapping S10 XYZ where
+  mapping = [biCase|
+     Nothing                  <-> Y
+     Just Null <-> X
+     Just (NotNull ()) <-> Z
+  |]
+
+  res = [[Z, X, Z], [X, Y, Z], [Z, Z, Z]]
+
+instance Mapping S11 XYZ where
+  mapping = [biCase|
+     Ap Nothing                  <-> Y
+     Ap (Just Null) <-> X
+     Ap (Just (NotNull ())) <-> Z
+  |]
+
+  res = [[Z, Z, Z], [Y, Y, Y], [Z, Z, Z]]
+
 
 
 -- instance Mapping S5 where
@@ -226,3 +246,10 @@ test = do
   -- print $ testTable3 @S7
   print "S7 missing"
   print $ testTable3 @S8
+  print "S8 not"
+  print "S9 not"
+  print $ testTable3 @S10
+  print $ testTable3 @S11
+  print "S12 not"
+  print $ testTable3 @S13
+  print "S14"
