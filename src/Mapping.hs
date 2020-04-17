@@ -234,6 +234,25 @@ instance Mapping S16 XYZ where
 
   res = [[X, X, Z], [Y, Y, Z], [Z, Z, Z]]
 
+instance Mapping S17 XYZ where
+  mapping = [biCase|
+    First Nothing    <-> X
+    First (Just False) <-> Y
+    First (Just True)  <-> Z
+  |]
+
+  res = [[X, X, X], [Y, Y, Y], [Z, Z, Z]]
+
+instance Mapping S18 XYZ where
+  mapping = [biCase|
+    LT    <-> X
+    EQ <-> Z
+    GT  <-> Y
+  |]
+
+  res = [[X, X, X], [Y, Y, Y], [X, Y, Z]]
+
+
 -- instance Mapping S5 where
 --     to (Maybe )
 
@@ -272,3 +291,5 @@ test = do
   print "S14"
   print "S15"
   print $ testTable3 @S16
+  print $ testTable3 @S17
+  print $ testTable3 @S18
