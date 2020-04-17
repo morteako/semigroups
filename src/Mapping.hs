@@ -153,6 +153,17 @@ instance Mapping S5 XYZ where
 
   res = [[Z, X, X], [X, Y, Z], [X, Z, Z]]
 
+instance Mapping S6 XYZ where
+  to Null                  = Y
+  to (NotNull (Xor False)) = Z
+  to (NotNull (Xor True )) = X
+
+  from Y = Null
+  from Z = (NotNull (Xor False))
+  from X = (NotNull (Xor True))
+
+  res = [[Z, X, X], [X, Z, Z], [X, Z, Z]]
+
 instance Mapping S13 XYZ where
   to (Max m) = case m of
     Nothing    -> X
@@ -189,3 +200,4 @@ test = do
   print $ testTable3 @S3
   print $ testTable3 @S4
   print $ testTable3 @S5
+  print $ testTable3 @S6

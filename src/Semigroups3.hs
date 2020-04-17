@@ -28,7 +28,7 @@ type S4 = Zero Xor --All
 type S5 = Maybe C2
 
 --Null
-type S6 = Zero C2
+type S6 = Null Xor C2
 
 type S7 = O3
 -- type O3 = Proxy
