@@ -19,11 +19,10 @@ import           Data.Semigroup
 import           Data.Monoid                    ( Ap(..) )
 -- import           Data.Mod
 import           Xor
-import           Null
 -- import qualified Data.Bimap                    as Bi
 import           Data.Invertible.TH
 import           Data.Invertible.Bijection
-
+import           Data.Proxy
 
 data Two = T1 | T2 deriving (Eq,Enum)
 
@@ -46,7 +45,16 @@ class Semigroup s => Mapping s t | s -> t where
     mapping = undefined
 
 
-
+checkTable3 :: forall s . Mapping s XYZ => [(s, s, String, s, s, s)]
+checkTable3 = do
+  let vs :: [s]
+      vs = map from [X, Y, Z]
+  x <- vs
+  y <- vs
+  z <- vs
+  let a = (x <> (y <> z))
+  let b = ((x <> y) <> z)
+  if to a == to b then [] else [(a, b, "ab <-> xyz", x, y, z)]
 
 makeTable3 :: forall s . Mapping s XYZ => [[XYZ]]
 makeTable3 = do
@@ -104,12 +112,10 @@ instance Mapping C2 Two where
   res  = [[T1, T2], [T2, T1]]
 
 instance Mapping O2 Two where
-  mapping = [biCase|
-    Null <-> T2
-    NotNull () <-> T1
-  |]
+  to   = const T1
+  from = const Proxy
 
-  res = [[T1, T1], [T1, T1]]
+  res  = [[T1, T1], [T1, T1]]
 
 
 instance Mapping LeftZero2 Two where
@@ -160,52 +166,52 @@ instance Mapping S5 XYZ where
 
   res = [[Z, X, X], [X, Y, Z], [X, Z, Z]]
 
-instance Mapping S6 XYZ where
-  mapping = [biCase|
-    Null <-> Y
-    (NotNull (Xor False)) <-> Z
-    (NotNull (Xor True )) <-> X
-  |]
+-- instance Mapping S6 XYZ where
+--   mapping = [biCase|
+--     Null <-> Y
+--     (NotNull (Xor False)) <-> Z
+--     (NotNull (Xor True )) <-> X
+--   |]
 
-  res = [[Z, X, X], [X, Z, Z], [X, Z, Z]]
+--   res = [[Z, X, X], [X, Z, Z], [X, Z, Z]]
 
-instance Mapping S7 XYZ where
-  mapping = [biCase|
-    Null                   <-> X
-    (NotNull Null        ) <-> Y
-    (NotNull (NotNull ())) <-> Z
-  |]
+-- instance Mapping S7 XYZ where
+--   mapping = [biCase|
+--     Null                   <-> X
+--     (NotNull Null        ) <-> Y
+--     (NotNull (NotNull ())) <-> Z
+--   |]
 
-  res = [[Z, Z, Z], [Z, Z, Z], [Z, Z, Z]]
-
-
-instance Mapping S8 XYZ where
-  mapping = [biCase|
-       Null                  <-> Y
-     (NotNull (All False)) <-> X
-     (NotNull (All True )) <-> Z
-  |]
-
-  res = [[Z, Z, Z], [Z, Y, Z], [Z, Z, Z]]
+--   res = [[Z, Z, Z], [Z, Z, Z], [Z, Z, Z]]
 
 
-instance Mapping S10 XYZ where
-  mapping = [biCase|
-     Nothing                  <-> Y
-     Just Null <-> X
-     Just (NotNull ()) <-> Z
-  |]
+-- instance Mapping S8 XYZ where
+--   mapping = [biCase|
+--        Null                  <-> Y
+--      (NotNull (All False)) <-> X
+--      (NotNull (All True )) <-> Z
+--   |]
 
-  res = [[Z, X, Z], [X, Y, Z], [Z, Z, Z]]
+--   res = [[Z, Z, Z], [Z, Y, Z], [Z, Z, Z]]
 
-instance Mapping S11 XYZ where
-  mapping = [biCase|
-     Ap Nothing                  <-> Y
-     Ap (Just Null) <-> X
-     Ap (Just (NotNull ())) <-> Z
-  |]
 
-  res = [[Z, Z, Z], [Y, Y, Y], [Z, Z, Z]]
+-- instance Mapping S10 XYZ where
+--   mapping = [biCase|
+--      Nothing                  <-> Y
+--      Just Null <-> X
+--      Just (NotNull ()) <-> Z
+--   |]
+
+--   res = [[Z, X, Z], [X, Y, Z], [Z, Z, Z]]
+
+-- instance Mapping S11 XYZ where
+--   mapping = [biCase|
+--      Ap Nothing                  <-> Y
+--      Ap (Just Null) <-> X
+--      Ap (Just (NotNull ())) <-> Z
+--   |]
+
+--   res = [[Z, Z, Z], [Y, Y, Y], [Z, Z, Z]]
 
 instance Mapping S13 XYZ where
   mapping = [biCase|
@@ -273,19 +279,20 @@ test = do
   print $ testTable @LeftZero2
   print $ testTable @RightZero2
 
+  putStrLn ""
   print "3elements"
-  print "S3 ->"
-  print $ testTable3 @S3
+  print "s1"
+  print "s2"
+  -- print $ testTable3 @S3
   print $ testTable3 @S4
   print $ testTable3 @S5
-  print $ testTable3 @S6
-  -- print $ testTable3 @S7
-  print "S7 missing"
-  print $ testTable3 @S8
-  print "S8 not"
+  -- print $ testTable3 @S6
+  -- putStr "S7 : " >> print (testTable3 @S7)
+  -- print "S7 missing"
+  -- print $ testTable3 @S8
   print "S9 not"
-  print $ testTable3 @S10
-  print $ testTable3 @S11
+  -- print $ testTable3 @S10
+  -- print $ testTable3 @S11
   print "S12 not"
   print $ testTable3 @S13
   print "S14"
@@ -293,3 +300,5 @@ test = do
   print $ testTable3 @S16
   print $ testTable3 @S17
   print $ testTable3 @S18
+
+

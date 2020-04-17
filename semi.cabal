@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d8747f288cad358cbc3527921313f4e6c58fe0f960a13c1e28e82249c2514710
+-- hash: 1d7c4d98593694ecb26bfec6a17acab4834eb09614f782c88d3743f28a7ec544
 
 name:           semi
 version:        0.1.0.0
@@ -23,7 +23,6 @@ executable semi
   main-is: Main.hs
   other-modules:
       Mapping
-      Null
       Semigroups2
       Semigroups3
       Sorted

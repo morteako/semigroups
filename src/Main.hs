@@ -3,7 +3,6 @@ module Main where
 import           Semigroups2
 import           Semigroups3
 import           Mapping
-import           Null
 import           Data.Semigroup
 
 check xs = do

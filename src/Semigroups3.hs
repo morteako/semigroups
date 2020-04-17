@@ -5,7 +5,6 @@ module Semigroups3 where
 import           Data.Monoid                    ( Alt )
 import           Xor
 import           Semigroups2
-import           Null
 import           Zero
 import           Data.Mod
 import           Data.Semigroup
@@ -20,7 +19,7 @@ type C3 = Sum (Mod 3)
 
 --S2 MISSING
 
-type S3 = Null (Null' ()) O2
+--S3 Missing
 
 -- type S4 = Maybe CH2 --All
 type S4 = Zero Xor --All
@@ -28,15 +27,13 @@ type S4 = Zero Xor --All
 type S5 = Maybe C2
 
 
-type S6 = Null Xor C2
+--S6 missing
+-- type S6 = Null Xor C2
 
---WRONG
-type S7 = Null (Null' ()) O2
--- type O3 = Proxy
-type O3 = Null () O2
+--S7 missing
 
 
-type S8 = Null' All
+--S8 missing
 
 
 type S9 = Zero O2
@@ -44,18 +41,22 @@ type S9 = Zero O2
 
 type S10 = Maybe O2
 
---check mapping
--- type S11 = Null All (First Bool)
-type S11 = Zero (Null () ())
 
-type S12 = Maybe O2
+--Missing
+-- type S11 = 
+
+--Missing
+-- type S12 = Maybe O2
 
 type S13 = Max (Maybe Bool)
 
 type S13' = Zero Any
 type S13'' = Maybe Any
+
+--Missing
 -- type S14 = 
 
+--Wrong
 type S15 = Maybe (First Bool)
 
 type S16 = Zero (First Bool)

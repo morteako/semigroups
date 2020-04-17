@@ -4,12 +4,12 @@ module Semigroups2 where
 
 import           Data.Semigroup
 import           Data.Mod
-import           Null
 import           Xor
+import           Data.Proxy
 
 
-type O2 = Null' ()
--- type O2 = Proxy
+-- type O2 = Null' ()
+type O2 = Proxy ()
 
 
 
