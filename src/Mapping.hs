@@ -16,7 +16,7 @@ import           Semigroups3
 
 import           Data.Coerce
 import           Data.Semigroup
-import           Data.Monoid
+import           Data.Monoid                    ( Ap(..) )
 -- import           Data.Mod
 import           Xor
 import           Null
@@ -178,14 +178,6 @@ instance Mapping S7 XYZ where
 
   res = [[Z, Z, Z], [Z, Z, Z], [Z, Z, Z]]
 
-instance Mapping S13 XYZ where
-  mapping = [biCase|
-    Max Nothing    <-> X
-    Max (Just False) <-> Y
-    Max (Just True)  <-> Z
-  |]
-
-  res = [[X, Y, Z], [Y, Y, Z], [Z, Z, Z]]
 
 instance Mapping S8 XYZ where
   mapping = [biCase|
@@ -215,7 +207,32 @@ instance Mapping S11 XYZ where
 
   res = [[Z, Z, Z], [Y, Y, Y], [Z, Z, Z]]
 
+instance Mapping S13 XYZ where
+  mapping = [biCase|
+    Max Nothing    <-> X
+    Max (Just False) <-> Y
+    Max (Just True)  <-> Z
+  |]
 
+  res = [[X, Y, Z], [Y, Y, Z], [Z, Z, Z]]
+
+-- instance Mapping S15 XYZ where
+--   mapping = [biCase|
+--     Max Nothing    <-> Z
+--     Max (Just False) <-> X
+--     Max (Just True)  <-> Y
+--   |]
+
+--   res = [[X, X, X], [Y, Y, Y], [X, X, Z]]
+
+instance Mapping S16 XYZ where
+  mapping = [biCase|
+    Ap Nothing    <-> Z
+    Ap (Just (First False)) <-> X
+    Ap (Just (First True))  <-> Y
+  |]
+
+  res = [[X, X, Z], [Y, Y, Z], [Z, Z, Z]]
 
 -- instance Mapping S5 where
 --     to (Maybe )
@@ -253,3 +270,5 @@ test = do
   print "S12 not"
   print $ testTable3 @S13
   print "S14"
+  print "S15"
+  print $ testTable3 @S16
