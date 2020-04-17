@@ -30,7 +30,7 @@ type S5 = Maybe C2
 --Null
 type S6 = Null Xor C2
 
-type S7 = O3
+type S7 = Null (Null' ()) O2
 -- type O3 = Proxy
 type O3 = Null () O2
 

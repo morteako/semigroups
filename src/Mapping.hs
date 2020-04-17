@@ -120,16 +120,16 @@ instance Mapping S1 XYZ where
   to   = toEnum . fromEnum . getSum
   from = Sum . toEnum . fromEnum
 
-instance Mapping S3 XYZ where
-  to Null                   = X
-  to (NotNull Null        ) = Y
-  to (NotNull (NotNull ())) = Z
+-- instance Mapping S3 XYZ where
+--   to Null                   = X
+--   to (NotNull Null        ) = Y
+--   to (NotNull (NotNull ())) = Z
 
-  from X = Null
-  from Y = NotNull Null
-  from Z = NotNull (NotNull ())
+--   from X = Null
+--   from Y = NotNull Null
+--   from Z = NotNull (NotNull ())
 
-  res = [[Y, Z, Z], [Z, Z, Z], [Z, Z, Z]]
+--   res = [[Y, Z, Z], [Z, Z, Z], [Z, Z, Z]]
 
 instance Mapping S4 XYZ where
   to (Ap Nothing           ) = Y
@@ -164,6 +164,17 @@ instance Mapping S6 XYZ where
 
   res = [[Z, X, X], [X, Z, Z], [X, Z, Z]]
 
+instance Mapping S7 XYZ where
+  to Null                   = X
+  to (NotNull Null        ) = Y
+  to (NotNull (NotNull ())) = Z
+
+  from X = Null
+  from Y = NotNull Null
+  from Z = NotNull (NotNull ())
+
+  res = [[Z, Z, Z], [Z, Z, Z], [Z, Z, Z]]
+
 instance Mapping S13 XYZ where
   to (Max m) = case m of
     Nothing    -> X
@@ -174,6 +185,16 @@ instance Mapping S13 XYZ where
     Y -> Just False
     Z -> Just True
 
+-- instance Mapping S7 XYZ where
+--   to Null                   = X
+--   to (NotNull Null        ) = Y
+--   to (NotNull (NotNull ())) = Z
+
+--   from Y = Null
+--   from Z = (NotNull Null)
+--   from X = (NotNull $ NotNull ())
+
+--   res = [[Z, Z, Z], [Z, Z, Z], [Z, Z, Z]]
 
 
 -- instance Mapping S5 where
@@ -201,3 +222,4 @@ test = do
   print $ testTable3 @S4
   print $ testTable3 @S5
   print $ testTable3 @S6
+  print $ testTable3 @S7
