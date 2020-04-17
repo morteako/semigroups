@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 51ef41cdd05d7a61c8c5184118ec77d2d159040dd18549d3230909cfdab4509a
+-- hash: d8747f288cad358cbc3527921313f4e6c58fe0f960a13c1e28e82249c2514710
 
-name:           semigroups
+name:           semi
 version:        0.1.0.0
 category:       Web
 homepage:       https://github.com/morteako/semigroups#readme
@@ -19,7 +19,7 @@ build-type:     Simple
 extra-source-files:
     README.md
 
-executable semigroups
+executable semi
   main-is: Main.hs
   other-modules:
       Mapping
@@ -29,11 +29,13 @@ executable semigroups
       Sorted
       Xor
       Zero
-      Paths_semigroups
+      Paths_semi
   hs-source-dirs:
       src
+  ghc-options: -fwarn-incomplete-patterns
   build-depends:
       base >=4.7 && <5
     , bimap
+    , invertible
     , mod
   default-language: Haskell2010

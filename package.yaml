@@ -1,4 +1,4 @@
-name:                semigroups
+name:                semi
 version:             0.1.0.0
 #synopsis:
 #description:
@@ -15,9 +15,14 @@ dependencies:
   - base >= 4.7 && < 5
   - mod
   - bimap
+  - invertible
 
+
+
+ghc-options:
+    - -fwarn-incomplete-patterns
 
 executables:
-  semigroups:
+  semi:
     source-dirs:      src
     main:             Main.hs

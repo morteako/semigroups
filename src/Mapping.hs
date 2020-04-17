@@ -6,6 +6,8 @@
 {-# LANGUAGE FlexibleContexts #-}
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE FunctionalDependencies #-}
+{-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE TypeOperators #-}
 
 module Mapping where
 
@@ -15,10 +17,13 @@ import           Semigroups3
 import           Data.Coerce
 import           Data.Semigroup
 import           Data.Monoid
-import           Data.Mod
+-- import           Data.Mod
 import           Xor
 import           Null
-import qualified Data.Bimap                    as Bi
+-- import qualified Data.Bimap                    as Bi
+import           Data.Invertible.TH
+import           Data.Invertible.Bijection
+
 
 data Two = T1 | T2 deriving (Eq,Enum)
 
@@ -30,11 +35,16 @@ data XYZ = X | Y | Z deriving (Show,Enum,Eq)
 
 class Semigroup s => Mapping s t | s -> t where
     to :: s -> t
+    to = biTo mapping
 
     from :: t -> s
+    from = biFrom mapping
 
     res :: [[t]]
-    res = undefined
+
+    mapping :: s <-> t
+    mapping = undefined
+
 
 
 
@@ -75,6 +85,12 @@ testTable3 = if r == table
   r     = res @s
   table = makeTable3 @s
 
+boolToT1 False = T1
+boolToT1 True  = T2
+
+t1ToBool T1 = False
+t1ToBool T2 = True
+
 instance Mapping CH2 Two where
   to   = coerce boolToT1
   from = coerce t1ToBool
@@ -88,20 +104,13 @@ instance Mapping C2 Two where
   res  = [[T1, T2], [T2, T1]]
 
 instance Mapping O2 Two where
-  to Null         = T2
-  to (NotNull ()) = T1
-
-  from T1 = NotNull ()
-  from T2 = Null
+  mapping = [biCase|
+    Null <-> T2
+    NotNull () <-> T1
+  |]
 
   res = [[T1, T1], [T1, T1]]
 
-
-boolToT1 False = T1
-boolToT1 True  = T2
-
-t1ToBool T1 = False
-t1ToBool T2 = True
 
 instance Mapping LeftZero2 Two where
   to   = coerce boolToT1
@@ -119,6 +128,7 @@ instance Mapping RightZero2 Two where
 instance Mapping S1 XYZ where
   to   = toEnum . fromEnum . getSum
   from = Sum . toEnum . fromEnum
+  res  = undefined
 
 -- instance Mapping S3 XYZ where
 --   to Null                   = X
@@ -132,69 +142,59 @@ instance Mapping S1 XYZ where
 --   res = [[Y, Z, Z], [Z, Z, Z], [Z, Z, Z]]
 
 instance Mapping S4 XYZ where
-  to (Ap Nothing           ) = Y
-  to (Ap (Just (Xor False))) = Z
-  to (Ap (Just (Xor True ))) = X
 
-  from Y = (Ap Nothing)
-  from Z = (Ap $ Just (Xor False))
-  from X = (Ap $ Just (Xor True))
+  mapping = [biCase|
+    (Ap Nothing           ) <-> Y
+    (Ap (Just (Xor False))) <-> Z
+    (Ap (Just (Xor True ))) <-> X
+  |]
 
   res = [[Z, Y, X], [Y, Y, Y], [X, Y, Z]]
 
 instance Mapping S5 XYZ where
-  to (Nothing         ) = Y
-  to (Just (Xor False)) = Z
-  to (Just (Xor True )) = X
-
-  from Y = (Nothing)
-  from Z = (Just (Xor False))
-  from X = (Just (Xor True))
+  mapping = [biCase|
+    (Nothing         ) <-> Y
+    (Just (Xor False)) <-> Z
+    (Just (Xor True )) <-> X
+  |]
 
   res = [[Z, X, X], [X, Y, Z], [X, Z, Z]]
 
 instance Mapping S6 XYZ where
-  to Null                  = Y
-  to (NotNull (Xor False)) = Z
-  to (NotNull (Xor True )) = X
-
-  from Y = Null
-  from Z = (NotNull (Xor False))
-  from X = (NotNull (Xor True))
+  mapping = [biCase|
+    Null <-> Y
+    (NotNull (Xor False)) <-> Z
+    (NotNull (Xor True )) <-> X
+  |]
 
   res = [[Z, X, X], [X, Z, Z], [X, Z, Z]]
 
 instance Mapping S7 XYZ where
-  to Null                   = X
-  to (NotNull Null        ) = Y
-  to (NotNull (NotNull ())) = Z
-
-  from X = Null
-  from Y = NotNull Null
-  from Z = NotNull (NotNull ())
+  mapping = [biCase|
+    Null                   <-> X
+    (NotNull Null        ) <-> Y
+    (NotNull (NotNull ())) <-> Z
+  |]
 
   res = [[Z, Z, Z], [Z, Z, Z], [Z, Z, Z]]
 
 instance Mapping S13 XYZ where
-  to (Max m) = case m of
-    Nothing    -> X
-    Just False -> Y
-    Just True  -> Z
-  from xyz = Max $ case xyz of
-    X -> Nothing
-    Y -> Just False
-    Z -> Just True
+  mapping = [biCase|
+    Max Nothing    <-> X
+    Max (Just False) <-> Y
+    Max (Just True)  <-> Z
+  |]
 
--- instance Mapping S7 XYZ where
---   to Null                   = X
---   to (NotNull Null        ) = Y
---   to (NotNull (NotNull ())) = Z
+  res = undefined
 
---   from Y = Null
---   from Z = (NotNull Null)
---   from X = (NotNull $ NotNull ())
+instance Mapping S8 XYZ where
+  mapping = [biCase|
+       Null                  <-> Y
+     (NotNull (All False)) <-> X
+     (NotNull (All True )) <-> Z
+  |]
 
---   res = [[Z, Z, Z], [Z, Z, Z], [Z, Z, Z]]
+  res = [[Z, Z, Z], [Z, Y, Z], [Z, Z, Z]]
 
 
 -- instance Mapping S5 where
@@ -218,8 +218,11 @@ test = do
   print $ testTable @RightZero2
 
   print "3elements"
+  print "S3 ->"
   print $ testTable3 @S3
   print $ testTable3 @S4
   print $ testTable3 @S5
   print $ testTable3 @S6
-  print $ testTable3 @S7
+  -- print $ testTable3 @S7
+  print "S7 missing"
+  print $ testTable3 @S8
