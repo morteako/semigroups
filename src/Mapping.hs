@@ -142,6 +142,17 @@ instance Mapping S4 XYZ where
 
   res = [[Z, Y, X], [Y, Y, Y], [X, Y, Z]]
 
+instance Mapping S5 XYZ where
+  to (Nothing         ) = Y
+  to (Just (Xor False)) = Z
+  to (Just (Xor True )) = X
+
+  from Y = (Nothing)
+  from Z = (Just (Xor False))
+  from X = (Just (Xor True))
+
+  res = [[Z, X, X], [X, Y, Z], [X, Z, Z]]
+
 instance Mapping S13 XYZ where
   to (Max m) = case m of
     Nothing    -> X
@@ -177,3 +188,4 @@ test = do
   print "3elements"
   print $ testTable3 @S3
   print $ testTable3 @S4
+  print $ testTable3 @S5
